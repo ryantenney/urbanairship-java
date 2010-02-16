@@ -3,6 +3,11 @@ package urbanairship.notifications;
 
 import java.util.*;
 
+/**
+ * 
+ * @see DeviceToken
+ *
+ */
 public class DeviceTokens
 {
 	private Integer deviceTokensCount;

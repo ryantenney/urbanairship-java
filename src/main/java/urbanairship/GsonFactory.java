@@ -3,7 +3,7 @@ package urbanairship;
 
 import com.google.gson.*;
 
-public class GsonFactory
+class GsonFactory
 {
 
 	public static Gson create()
