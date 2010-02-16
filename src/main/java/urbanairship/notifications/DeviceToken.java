@@ -5,11 +5,13 @@ import java.util.*;
 
 /**
  * 
+ *  TODO rename this class to 'Device'  (???)
+ *  
  *  @see DeviceTokens
  *
  *
  */
-public class DeviceToken // todo : rename this class to "Device" (?)
+public class DeviceToken
 {
 	private String token;
 	private boolean active = true;

@@ -5,7 +5,39 @@ import java.util.*;
 
 public class Feedback
 {
-	private String device_token;
-	private Calendar marked_inactive_on;
+	private String deviceToken;
+	private Calendar markedInactiveOn;
 	private String alias;
+	
+	public String getDeviceToken()
+	{
+		return deviceToken;
+	}
+	
+	public void setDeviceToken(String deviceToken)
+	{
+		this.deviceToken = deviceToken;
+	}
+	
+	public Calendar getMarkedInactiveOn()
+	{
+		return markedInactiveOn;
+	}
+	
+	public void setMarkedInactiveOn(Calendar markedInactiveOn)
+	{
+		this.markedInactiveOn = markedInactiveOn;
+	}
+	
+	public String getAlias()
+	{
+		return alias;
+	}
+	
+	public void setAlias(String alias)
+	{
+		this.alias = alias;
+	}
+	
+	
 }
