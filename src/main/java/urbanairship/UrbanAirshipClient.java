@@ -33,7 +33,8 @@ public class UrbanAirshipClient
 	
 	public void create(DeviceToken dt)
 	{
-		put("/foo/bar", dt);
+		String token = dt.getToken();
+		put("/api/device_tokens/" + token, dt);
 	}
 	
 	protected void put(String path, Object requestBodyObject)
