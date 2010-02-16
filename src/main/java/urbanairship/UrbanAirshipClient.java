@@ -10,6 +10,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -22,13 +23,12 @@ import com.google.gson.Gson;
 
 public class UrbanAirshipClient
 {
-	private static final String PUSH_BATCH_URI = "/api/push/batch/";
 	private static final String CHARSET = "UTF-8";
 	private boolean production = false;
 
 	public UrbanAirshipClient(boolean isProduction)
 	{
-		this.setProduction(isProduction);
+		this.production = isProduction;
 	}
 	
 	public void create(DeviceToken dt)
@@ -55,24 +55,30 @@ public class UrbanAirshipClient
 
 	public DeviceToken getDeviceToken(String deviceToken)
 	{
-		return null; // todo
+		return get(DeviceToken.class, "/api/device_tokens/" + deviceToken); 
 	}
 	
-	public void createPushNotifications(Push... p)
+	protected HttpGet createHttpGet(String path)
 	{
-		// todo
+		HttpGet get = new HttpGet(this.getUrlForPath(path));
+		return get;
+	}
+
+	public void sendPushNotifications(Push... p)
+	{
 		if (p.length == 0)
 		{
-			throw new IllegalArgumentException("todo");
+			throw new IllegalArgumentException("parameter p");
 		}
 		else if (p.length == 1)
 		{
 			// single push notification
+			// todo
 		}
 		else
 		{
 			// batch of push notifications
-			
+			// todo
 		}
 	}
 	
@@ -88,12 +94,7 @@ public class UrbanAirshipClient
 				null); 
 	}
 	
-	public void setProduction(boolean b)
-	{
-		this.production  = b;
-	}
-	
-	protected <T> T post(String path, Object obj, Class<T> responseType)
+	protected <T> T post(final String path, final Object obj, final Class<T> responseType)
 	{
 		
 		HttpPost post = createHttpPost(path);
@@ -114,8 +115,9 @@ public class UrbanAirshipClient
 		}
 	}
 
-	protected HttpEntity toJsonEntity(Object obj)
+	protected HttpEntity toJsonEntity(final Object obj)
 	{
+		
 		String json = toJson(obj);
 		
 		HttpEntity e = null;
@@ -142,7 +144,7 @@ public class UrbanAirshipClient
 
 	protected void checkResponse(HttpResponse response)
 	{
-		// TODO Auto-generated method stub
+		// TODO : code here
 	}
 
 	protected <T> T fromJson(HttpResponse rsp, Class<T> clazz)
@@ -151,6 +153,10 @@ public class UrbanAirshipClient
 		{
 			String responseBody = EntityUtils.toString(rsp.getEntity());
 			return fromJson(responseBody, clazz);
+		}
+		catch (RuntimeException rtex)
+		{
+			throw rtex;
 		}
 		catch (Exception e)
 		{
@@ -162,7 +168,13 @@ public class UrbanAirshipClient
 	{
 		try
 		{
-			return getHttpClient().execute(method);
+			HttpResponse rsp = getHttpClient().execute(method);
+			checkResponse(rsp);
+			return rsp;
+		}
+		catch (RuntimeException rtex)
+		{
+			throw rtex;
 		}
 		catch (Exception ex)
 		{
@@ -202,14 +214,19 @@ public class UrbanAirshipClient
 		return this.production;
 	}
 
-	public List<Feedback> getFeedback(long since)
+	public List<Feedback> getFeedback(final long since)
 	{
+		if (since < 0)
+		{
+			throw new IllegalArgumentException("since parameter: " + since);
+		}
+		
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(since);
 		return getFeedback(c);
 	}
 	
-	public FeedbackList getFeedback(Calendar since)
+	public FeedbackList getFeedback(final Calendar since)
 	{
 		FeedbackList feedbackList = get(
 						FeedbackList.class,
@@ -220,30 +237,39 @@ public class UrbanAirshipClient
 		return feedbackList;
 	}
 
-	protected <T> T get(Class<T> clazz, String path, String... parameters)
+	protected <T> T get(final Class<T> clazz, final String path, final String... parameters)
 	{
-		return null;
+		HttpGet get = createHttpGet(path);
+		
+		HttpResponse rsp = this.execute(get);
+		
+		return fromJson(rsp, clazz);
 	}
 	
-	protected <T> String toJson(T object)
+	protected <T> String toJson(final T object)
 	{
+		if (object == null)
+		{
+			throw new NullPointerException("object parameter is null");
+		}
+		
 		Gson gson = GsonFactory.create();
 		return gson.toJson(object);
 	}
 	
-	protected <T> T fromJson(String json, Class<T> clazz)
+	protected <T> T fromJson(final String json, final Class<T> clazz)
 	{
 		Gson gson = GsonFactory.create();
 		return gson.fromJson(json, clazz);
 	}
 
-	protected void delete(String path)
+	protected void delete(final String path)
 	{
 		HttpDelete delete = createHttpDelete(path);
 		execute(delete);
 	}
 
-	private HttpDelete createHttpDelete(String path)
+	private HttpDelete createHttpDelete(final String path)
 	{
 		HttpDelete delete = new HttpDelete(getUrlForPath(path));
 		return delete;
