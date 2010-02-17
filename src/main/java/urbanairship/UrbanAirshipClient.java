@@ -8,6 +8,10 @@ import java.util.*;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -15,6 +19,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
@@ -25,10 +30,14 @@ public class UrbanAirshipClient
 {
 	private static final String CHARSET = "UTF-8";
 	private boolean production = false;
+	private String username;
+	private String password;
 
-	public UrbanAirshipClient(boolean isProduction)
+	public UrbanAirshipClient(boolean isProduction, String username, String password)
 	{
 		this.production = isProduction;
+		this.username = username;
+		this.password = password;
 	}
 	
 	public void create(DeviceToken dt)
@@ -144,7 +153,33 @@ public class UrbanAirshipClient
 
 	protected void checkResponse(HttpResponse response)
 	{
-		// TODO : code here
+		
+		StatusLine status = response.getStatusLine();
+		
+		int statusCode = status.getStatusCode();
+		
+		if ( (statusCode < 200) || (statusCode > 299) )
+		{
+			
+			StringBuilder msg = new StringBuilder();
+			
+			// todo : improve msg by including more details (URL, headers, etc)
+			
+			msg.append("statusCode=" + statusCode);
+			
+			try
+			{
+				String responseBody = EntityUtils.toString(response.getEntity());
+				msg.append(", responseBody=" + responseBody);
+			}
+			catch (Exception ignored)
+			{
+				// ignored
+			}
+			
+			
+			throw new RuntimeException("unexpected response: " + msg);
+		}
 	}
 
 	protected <T> T fromJson(HttpResponse rsp, Class<T> clazz)
@@ -184,8 +219,26 @@ public class UrbanAirshipClient
 
 	protected HttpClient getHttpClient()
 	{
-		HttpClient client = new DefaultHttpClient();
+		DefaultHttpClient client = new DefaultHttpClient();
+		
+		CredentialsProvider credProvider = new BasicCredentialsProvider();
+		credProvider.setCredentials(
+		    new AuthScope(getHostname(), AuthScope.ANY_PORT), 
+		    new UsernamePasswordCredentials(getUsername(), getPassword()));
+		
+		client.setCredentialsProvider(credProvider);
+		
 		return client;
+	}
+
+	protected String getUsername()
+	{
+		return this.username;
+	}
+
+	protected String getPassword()
+	{
+		return this.password;
 	}
 
 	private HttpPost createHttpPost(String path)
