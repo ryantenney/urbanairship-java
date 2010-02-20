@@ -1,23 +1,15 @@
 
 package urbanairship;
 
-import urbanairship.notifications.*;
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
+import org.apache.http.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.*;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -40,11 +32,12 @@ public class UrbanAirshipClient
 		this.password = password;
 	}
 	
-	public void create(DeviceToken dt)
+	public void register(DeviceToken dt)
 	{
 		String token = dt.getToken();
-		put("/api/device_tokens/" + token, dt);
+		put("/api/device_tokens/" + encode(token), dt);
 	}
+	
 	
 	protected void put(String path, Object requestBodyObject)
 	{
@@ -56,6 +49,11 @@ public class UrbanAirshipClient
 	}
 	
 	
+	protected void post(String path, Object requestBodyObject)
+	{
+		post(path, requestBodyObject, null);
+	}
+	
 	protected HttpPut createHttpPut(String path)
 	{
 		HttpPut put = new HttpPut(getUrlForPath(path));
@@ -64,7 +62,7 @@ public class UrbanAirshipClient
 
 	public DeviceToken getDeviceToken(String deviceToken)
 	{
-		return get(DeviceToken.class, "/api/device_tokens/" + deviceToken); 
+		return get(DeviceToken.class, "/api/device_tokens/" + encode(deviceToken)); 
 	}
 	
 	protected HttpGet createHttpGet(String path)
@@ -82,12 +80,12 @@ public class UrbanAirshipClient
 		else if (p.length == 1)
 		{
 			// single push notification
-			// todo
+			post("/api/push", p[0]);
 		}
 		else
 		{
 			// batch of push notifications
-			// todo
+			post("/api/push/batch", p);
 		}
 	}
 	
@@ -98,9 +96,7 @@ public class UrbanAirshipClient
 	
 	public void broadcast(Broadcast b)
 	{
-		post("/api/push/broadcast",
-				b, 
-				null); 
+		post("/api/push/broadcast", b);
 	}
 	
 	protected <T> T post(final String path, final Object obj, final Class<T> responseType)
@@ -222,6 +218,7 @@ public class UrbanAirshipClient
 		DefaultHttpClient client = new DefaultHttpClient();
 		
 		CredentialsProvider credProvider = new BasicCredentialsProvider();
+		
 		credProvider.setCredentials(
 		    new AuthScope(getHostname(), AuthScope.ANY_PORT), 
 		    new UsernamePasswordCredentials(getUsername(), getPassword()));
@@ -327,4 +324,17 @@ public class UrbanAirshipClient
 		HttpDelete delete = new HttpDelete(getUrlForPath(path));
 		return delete;
 	}
+
+	protected String encode(String s)
+	{
+		try
+		{
+			return URLEncoder.encode(s, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
 }

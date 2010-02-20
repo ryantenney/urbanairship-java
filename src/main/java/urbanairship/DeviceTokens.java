@@ -1,5 +1,5 @@
 
-package urbanairship.notifications;
+package urbanairship;
 
 import java.util.*;
 

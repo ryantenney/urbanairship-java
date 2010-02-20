@@ -1,5 +1,5 @@
 
-package urbanairship.notifications;
+package urbanairship;
 
 public class APS
 {

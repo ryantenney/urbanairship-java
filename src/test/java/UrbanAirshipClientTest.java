@@ -1,8 +1,7 @@
 
 import org.testng.annotations.*;
 
-import urbanairship.UrbanAirshipClient;
-import urbanairship.notifications.DeviceToken;
+import urbanairship.*;
 
 public class UrbanAirshipClientTest
 {
@@ -14,6 +13,6 @@ public class UrbanAirshipClientTest
 		DeviceToken dtoken = new DeviceToken();
 		dtoken.setToken("dtoken123-" + System.currentTimeMillis());
 		
-		client.create(dtoken);
+		client.register(dtoken);
 	}
 }
