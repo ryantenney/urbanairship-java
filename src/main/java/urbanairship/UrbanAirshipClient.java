@@ -10,6 +10,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.*;
 import org.apache.http.client.methods.*;
+import org.apache.http.client.params.AllClientPNames;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -24,6 +25,7 @@ public class UrbanAirshipClient
 	private boolean production = false;
 	private String username;
 	private String password;
+	private String userAgent = this.getClass().getName(); 
 
 	public UrbanAirshipClient(boolean isProduction, String username, String password)
 	{
@@ -262,6 +264,8 @@ public class UrbanAirshipClient
 	{
 		try
 		{
+			method.setHeader(new BasicHeader("Accept", "application/json"));
+			method.setHeader(new BasicHeader("Content-Type", "application/json"));
 			HttpResponse rsp = getHttpClient().execute(method);
 			checkResponse(rsp);
 			return rsp;
@@ -280,6 +284,8 @@ public class UrbanAirshipClient
 	{
 		DefaultHttpClient client = new DefaultHttpClient();
 		
+		client.getParams().setParameter(AllClientPNames.USER_AGENT, this.userAgent);
+
 		CredentialsProvider credProvider = new BasicCredentialsProvider();
 		
 		credProvider.setCredentials(
