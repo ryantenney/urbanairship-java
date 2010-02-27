@@ -1,7 +1,7 @@
 
 package urbanairship;
 
-public class APS
+public class APS implements java.io.Serializable
 {
 	private Integer badge;
 	private String alert;

@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class Broadcast
+public class Broadcast implements java.io.Serializable
 {
 	private APS aps;
 	private Calendar scheduleFor; // schedule_for is optional

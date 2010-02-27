@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class Feedback
+public class Feedback implements java.io.Serializable
 {
 	private String deviceToken;
 	private Calendar markedInactiveOn;

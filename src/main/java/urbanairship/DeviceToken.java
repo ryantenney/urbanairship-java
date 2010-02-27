@@ -11,7 +11,7 @@ import java.util.*;
  *
  *
  */
-public class DeviceToken
+public class DeviceToken implements java.io.Serializable
 {
 	private String token;
 	private boolean active = true;

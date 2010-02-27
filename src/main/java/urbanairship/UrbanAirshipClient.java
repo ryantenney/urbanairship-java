@@ -32,18 +32,69 @@ public class UrbanAirshipClient
 		this.password = password;
 	}
 	
+	public List<String> getTags()
+	{
+		TagsResponse resp = get(TagsResponse.class, "/api/tags");
+
+		if (resp == null)
+		{
+			return new ArrayList<String>();
+		}
+		else
+		{
+			return resp.tags;
+		}
+	}
+	
+	public void addTagToDevice(String deviceToken, String tag)
+	{
+		if (tag.length() > 255)
+		{
+			throw new IllegalArgumentException("maximum tag length is 255. Tag: " + tag);
+		}
+		
+		put("/api/device_tokens/" + encode(deviceToken) + "/tags/" + encode(tag));
+	}
+	
+	public void removeTagFromDevice(String deviceToken, String tag)
+	{
+		delete("/api/device_tokens/" + encode(deviceToken) + "/tags/" + encode(tag));
+	}
+
+	public List<String> getTagsForDevice(String deviceToken)
+	{
+		TagsResponse resp = get(TagsResponse.class, "/api/device_tokens/" + encode(deviceToken) + "/tags");
+		
+		if (resp == null)
+		{
+			return new ArrayList<String>();
+		}
+		else
+		{
+			return resp.tags;
+		}
+	}
+	
 	public void register(DeviceToken dt)
 	{
 		String token = dt.getToken();
 		put("/api/device_tokens/" + encode(token), dt);
 	}
 	
+
+	protected void put(String path)
+	{
+		put(path, null);
+	}
 	
 	protected void put(String path, Object requestBodyObject)
 	{
 		HttpPut put = createHttpPut(path);
 		
-		put.setEntity(toJsonEntity(requestBodyObject));
+		if (requestBodyObject != null)
+		{
+			put.setEntity(toJsonEntity(requestBodyObject));
+		}
 		
 		execute(put);
 	}
@@ -89,9 +140,13 @@ public class UrbanAirshipClient
 		}
 	}
 	
-	public void cancelScheduledNotifications(String... scheduledNotifications)
+	public void cancelScheduledNotifications(String... scheduledNotificationUrls)
 	{
-		// todo 
+		Map<String, String[]> cancelMap = new HashMap<String, String[]>();
+		cancelMap.put("cancel", scheduledNotificationUrls);
+		
+		post("https://go.urbanairship.com/api/push/scheduled", cancelMap);
+		
 	}
 	
 	public void broadcast(Broadcast b)
@@ -104,7 +159,10 @@ public class UrbanAirshipClient
 		
 		HttpPost post = createHttpPost(path);
 		
-		post.setEntity(toJsonEntity(obj));
+		if (obj != null)
+		{
+			post.setEntity(toJsonEntity(obj));
+		}
 		
 		HttpResponse response = execute(post);
 
@@ -154,7 +212,12 @@ public class UrbanAirshipClient
 		
 		int statusCode = status.getStatusCode();
 		
-		if ( (statusCode < 200) || (statusCode > 299) )
+	
+		if (statusCode == 404)
+		{
+			throw new NotFoundException();
+		}
+		else if ( (statusCode < 200) || (statusCode > 299) )
 		{
 			
 			StringBuilder msg = new StringBuilder();

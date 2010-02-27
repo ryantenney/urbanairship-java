@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class Push
+public class Push implements java.io.Serializable
 {
 	private List<String> deviceTokens = new ArrayList<String>();
 	private List<String> aliases = new ArrayList<String>();
