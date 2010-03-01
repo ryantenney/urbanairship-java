@@ -124,8 +124,16 @@ public class UrbanAirshipClient
 		return get;
 	}
 
-	public void sendPushNotifications(Push... p)
+	/**
+	 * 
+	 * 
+	 * @return may return null
+	 * 
+	 */
+	public ScheduledNotifications sendPushNotifications(Push... p)
 	{
+		ScheduledNotifications result = null;
+		
 		if (p.length == 0)
 		{
 			throw new IllegalArgumentException("parameter p");
@@ -133,13 +141,15 @@ public class UrbanAirshipClient
 		else if (p.length == 1)
 		{
 			// single push notification
-			post("/api/push", p[0]);
+			result = post("/api/push", p[0], ScheduledNotifications.class);
 		}
 		else
 		{
 			// batch of push notifications
-			post("/api/push/batch", p);
+			result = post("/api/push/batch", p, ScheduledNotifications.class);
 		}
+		
+		return result;
 	}
 	
 	public void cancelScheduledNotifications(String... scheduledNotificationUrls)
@@ -185,20 +195,9 @@ public class UrbanAirshipClient
 		
 		String json = toJson(obj);
 		
-		HttpEntity e = null;
-		
 		try
 		{
-			e = new StringEntity(json, CHARSET)
-			{
-				@Override
-				public Header getContentType()
-				{
-					Header h = new BasicHeader("Content-Type", "application/json");
-					return h;
-				}
-			};
-			return e;
+			return new JsonEntity(json);
 		}
 		catch (Exception ex)
 		{
@@ -217,7 +216,7 @@ public class UrbanAirshipClient
 	
 		if (statusCode == 404)
 		{
-			throw new NotFoundException();
+			throw new NotFoundException(status.getReasonPhrase());
 		}
 		else if ( (statusCode < 200) || (statusCode > 299) )
 		{
@@ -245,6 +244,16 @@ public class UrbanAirshipClient
 
 	protected <T> T fromJson(HttpResponse rsp, Class<T> clazz)
 	{
+		if (clazz == null)
+		{
+			return null;
+		}
+		
+		if (rsp.getEntity() == null)
+		{
+			return null;
+		}
+		
 		try
 		{
 			String responseBody = EntityUtils.toString(rsp.getEntity());
@@ -265,7 +274,6 @@ public class UrbanAirshipClient
 		try
 		{
 			method.setHeader(new BasicHeader("Accept", "application/json"));
-			method.setHeader(new BasicHeader("Content-Type", "application/json"));
 			HttpResponse rsp = getHttpClient().execute(method);
 			checkResponse(rsp);
 			return rsp;
@@ -406,4 +414,22 @@ public class UrbanAirshipClient
 		}
 	}
 
+	static private class JsonEntity extends StringEntity
+	{
+		
+		public JsonEntity(String jsonString) throws UnsupportedEncodingException
+		{
+			super(jsonString, CHARSET);
+		}
+		
+		
+		@Override
+		public Header getContentType()
+		{
+			Header h = new BasicHeader("Content-Type", "application/json");
+			return h;
+		}
+		
+	}
+	
 }
