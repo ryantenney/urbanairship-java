@@ -141,12 +141,12 @@ public class UrbanAirshipClient
 		else if (p.length == 1)
 		{
 			// single push notification
-			result = post("/api/push", p[0], ScheduledNotifications.class);
+			result = post("/api/push/", p[0], ScheduledNotifications.class);
 		}
 		else
 		{
 			// batch of push notifications
-			result = post("/api/push/batch", p, ScheduledNotifications.class);
+			result = post("/api/push/batch/", p, ScheduledNotifications.class);
 		}
 		
 		return result;
@@ -157,13 +157,13 @@ public class UrbanAirshipClient
 		Map<String, String[]> cancelMap = new HashMap<String, String[]>();
 		cancelMap.put("cancel", scheduledNotificationUrls);
 		
-		post("https://go.urbanairship.com/api/push/scheduled", cancelMap);
+		post("https://go.urbanairship.com/api/push/scheduled/", cancelMap);
 		
 	}
 	
 	public void broadcast(Broadcast b)
 	{
-		post("/api/push/broadcast", b);
+		post("/api/push/broadcast/", b);
 	}
 	
 	protected <T> T post(final String path, final Object obj, final Class<T> responseType)
