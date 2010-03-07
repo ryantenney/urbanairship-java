@@ -269,6 +269,12 @@ public class UrbanAirshipClient
 		}
 	}
 	
+	public List<Stat> getPushStats(Calendar start, Calendar end)
+	{
+		// todo 
+		return null;
+	}
+	
 	protected HttpResponse execute(HttpRequestBase method)
 	{
 		try
