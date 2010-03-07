@@ -39,7 +39,10 @@ public class DeviceToken implements java.io.Serializable
 		{
 			throw new IllegalArgumentException("token length should be 64. Actual: " + tkn.length());
 		}
+		
+		
 		this.token = tkn;
+		
 	}
 	
 	public boolean isActive()
