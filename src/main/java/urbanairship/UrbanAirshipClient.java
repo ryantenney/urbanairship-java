@@ -178,8 +178,6 @@ public class UrbanAirshipClient
 		
 		HttpResponse response = execute(post);
 
-		checkResponse(response);
-		
 		if (responseType == null)
 		{
 			return null;
@@ -206,7 +204,7 @@ public class UrbanAirshipClient
 		
 	}
 
-	protected void checkResponse(HttpResponse response)
+	protected void checkResponse(HttpRequest request, HttpResponse response)
 	{
 		
 		StatusLine status = response.getStatusLine();
@@ -223,14 +221,22 @@ public class UrbanAirshipClient
 			
 			StringBuilder msg = new StringBuilder();
 			
-			// todo : improve msg by including more details (URL, headers, etc)
-			
 			msg.append("statusCode=" + statusCode);
+			
+			msg.append("\n");
+			
+			msg.append("method=" + request.getRequestLine().getMethod());
+			
+			msg.append("\n");
+			
+			msg.append(request.getRequestLine().getUri());
+			
 			
 			try
 			{
 				String responseBody = EntityUtils.toString(response.getEntity());
-				msg.append(", responseBody=" + responseBody);
+				msg.append("\n");
+				msg.append("responseBody=" + responseBody);
 			}
 			catch (Exception ignored)
 			{
@@ -238,7 +244,7 @@ public class UrbanAirshipClient
 			}
 			
 			
-			throw new RuntimeException("unexpected response: " + msg);
+			throw new RuntimeException("unexpected response\n" + msg);
 		}
 	}
 
@@ -281,7 +287,7 @@ public class UrbanAirshipClient
 		{
 			method.setHeader(new BasicHeader("Accept", "application/json"));
 			HttpResponse rsp = getHttpClient().execute(method);
-			checkResponse(rsp);
+			checkResponse(method, rsp);
 			return rsp;
 		}
 		catch (RuntimeException rtex)
