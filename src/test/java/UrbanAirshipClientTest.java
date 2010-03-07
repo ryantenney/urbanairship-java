@@ -30,8 +30,9 @@ public class UrbanAirshipClientTest
 		UrbanAirshipClient client = new UrbanAirshipClient(true, username, password);
 		
 		DeviceToken dtoken = new DeviceToken();
-		dtoken.setToken("dtoken123-" + System.currentTimeMillis());
+		dtoken.setToken("todo");
 		
 		client.register(dtoken);
 	}
+	
 }
