@@ -23,9 +23,23 @@ public class DeviceToken implements java.io.Serializable
 		return token;
 	}
 	
-	public void setToken(String token)
+	/**
+	 * 
+	 * @param token token should be upper case without spaces and 64 characters long
+	 * 
+	 * 
+	 */
+	public void setToken(String tkn)
 	{
-		this.token = token;
+		if (tkn == null)
+		{
+			throw new NullPointerException("tkn parameter is null");
+		}
+		else if (tkn.length() != 64)
+		{
+			throw new IllegalArgumentException("token length should be 64. Actual: " + tkn.length());
+		}
+		this.token = tkn;
 	}
 	
 	public boolean isActive()
