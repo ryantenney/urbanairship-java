@@ -26,12 +26,19 @@ public class UrbanAirshipClient
 	private String username;
 	private String password;
 	private String userAgent = this.getClass().getName(); 
+	private HttpClient httpClient;
 
 	public UrbanAirshipClient(boolean isProduction, String username, String password)
+	{
+		this(isProduction, username, password, null);
+	}
+	
+	public UrbanAirshipClient(boolean isProduction, String username, String password, HttpClient hc)
 	{
 		this.production = isProduction;
 		this.username = username;
 		this.password = password;
+		this.httpClient = hc;
 	}
 	
 	public List<String> getTags()
@@ -116,6 +123,11 @@ public class UrbanAirshipClient
 	public DeviceToken getDeviceToken(String deviceToken)
 	{
 		return get(DeviceToken.class, "/api/device_tokens/" + encode(deviceToken)); 
+	}
+	
+	public DeviceTokensResponse getDeviceTokens()
+	{
+		return get(DeviceTokensResponse.class, "/api/device_tokens/"); 
 	}
 	
 	protected HttpGet createHttpGet(String path)
@@ -301,6 +313,15 @@ public class UrbanAirshipClient
 	}
 
 	protected HttpClient getHttpClient()
+	{
+		if (this.httpClient == null)
+		{
+			this.httpClient = createHttpClient();
+		}
+		return this.httpClient;
+	}
+	
+	protected HttpClient createHttpClient()
 	{
 		DefaultHttpClient client = new DefaultHttpClient();
 		
