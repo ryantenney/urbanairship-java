@@ -90,7 +90,60 @@ public class UrbanAirshipClient
 		put("/api/device_tokens/" + encode(token), dt);
 	}
 	
-
+	public UserCredentials create(User u)
+	{
+		return post("/api/user/", u, UserCredentials.class);
+	}
+	
+	public void updateUserByUserId(User u, String userid)
+	{
+		if (userid == null)
+		{
+			throw new IllegalArgumentException("userid parameter is null");
+		}
+		
+		put("/api/user/" + userid + "/", u);
+	}
+	
+	public void updateUserByAlias(User u, String alias)
+	{
+		if (alias == null)
+		{
+			throw new IllegalArgumentException("alias parameter is null");
+		}
+		put("/api/user/alias/" + alias + "/", u);
+	}
+	
+	public UserCredentials reset(UserCredentials creds)
+	{
+		return post("/api/user/" + creds.getUserId() + "/creds/reset/", creds, UserCredentials.class);
+	}
+	
+	public void deleteUser(String userId)
+	{
+		delete("/api/user/" + userId + "/");
+	}
+	
+	public void send(Airmail airmail)
+	{
+		post("/api/airmail/send/", airmail);
+	}
+	
+	public void send(List<Airmail> airmailList)
+	{
+		post("/api/airmail/send/batch/", airmailList);
+	}
+	
+	public Messages getMessagesByUserId(String userId)
+	{
+		return null;
+	}
+	
+	public void sendToAllUsers(Airmail airmail)
+	{
+		post("/api/airmail/send/broadcast/", airmail);
+	}
+	
 	protected void put(String path)
 	{
 		put(path, null);
