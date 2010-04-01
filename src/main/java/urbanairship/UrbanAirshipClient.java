@@ -151,9 +151,19 @@ public class UrbanAirshipClient
 		return get(Messages.class, uri);
 	}
 	
+	public String getMessageBody(String messageBodyUrl)
+	{
+		return getString(messageBodyUrl);
+	}
+	
 	public Message getMessage(String messageUrl)
 	{
 		return get(Message.class, messageUrl);
+	}
+	
+	public void markRead(Message m)
+	{
+		post(m.getMessageReadUrl(), null);
 	}
 	
 	public void sendToAllUsers(Airmail airmail)
@@ -474,6 +484,27 @@ public class UrbanAirshipClient
 		return feedbackList;
 	}
 
+	protected String getString(final String path, final String... parameters)
+	{
+		HttpGet get = createHttpGet(path);
+		
+		HttpResponse rsp = this.execute(get);
+		
+		return toString(rsp);
+	}
+	
+	protected String toString(HttpResponse rsp)
+	{
+		try
+		{
+			return EntityUtils.toString(rsp.getEntity());
+		}
+		catch (java.io.IOException ex)
+		{
+			throw new RuntimeException(ex);
+		}
+	}
+	
 	protected <T> T get(final Class<T> clazz, final String path, final String... parameters)
 	{
 		HttpGet get = createHttpGet(path);
