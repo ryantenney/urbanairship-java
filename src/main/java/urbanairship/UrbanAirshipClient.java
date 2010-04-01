@@ -124,6 +124,11 @@ public class UrbanAirshipClient
 		delete("/api/user/" + userId + "/");
 	}
 	
+	public void deleteMessage(Message m)
+	{
+		delete(m.getMessageUrl());
+	}
+	
 	public void send(Airmail airmail)
 	{
 		post("/api/airmail/send/", airmail);
@@ -134,9 +139,21 @@ public class UrbanAirshipClient
 		post("/api/airmail/send/batch/", airmailList);
 	}
 	
-	public Messages getMessagesByUserId(String userId)
+	public Messages getMessagesByUserId(String userId, boolean fullList)
 	{
-		return null;
+		String uri = "/api/user/" + userId + "/messages/";
+		
+		if (fullList)
+		{
+			uri += "?full_list=true";
+		}
+		
+		return get(Messages.class, uri);
+	}
+	
+	public Message getMessage(String messageUrl)
+	{
+		return get(Message.class, messageUrl);
 	}
 	
 	public void sendToAllUsers(Airmail airmail)
@@ -412,9 +429,16 @@ public class UrbanAirshipClient
 
 	protected String getUrlForPath(String path)
 	{
-		return "https://" 
+		if (path.startsWith("http://") || (path.startsWith("https://")))
+		{
+			return path;
+		}
+		else
+		{
+			return "https://" 
 				+ getHostname()
 				+ path;
+		}
 	}
 
 	protected String getHostname()
