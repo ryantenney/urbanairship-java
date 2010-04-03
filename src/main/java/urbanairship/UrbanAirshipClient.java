@@ -129,6 +129,21 @@ public class UrbanAirshipClient
 		delete(m.getMessageUrl());
 	}
 	
+	public void deleteMessages(final Message...msgs)
+	{
+		String[] urls = new String[msgs.length];
+		
+		for (int i = 0; i < msgs.length; i++)
+		{
+			urls[i] = msgs[i].getMessageUrl();
+		}
+		
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		map.put("delete", urls);
+		
+		post("/api/user/" + this.username + "/messages/delete/", map);
+	}
+	
 	public void send(Airmail airmail)
 	{
 		post("/api/airmail/send/", airmail);
@@ -161,9 +176,28 @@ public class UrbanAirshipClient
 		return get(Message.class, messageUrl);
 	}
 	
-	public void markRead(Message m)
+	public void markAsRead(String userId, final Message... msgs)
 	{
-		post(m.getMessageReadUrl(), null);
+		if (msgs.length == 0)
+		{
+			throw new IllegalArgumentException("msgs.length is zero");
+		}
+		else if (msgs.length == 1)
+		{
+			post(msgs[0].getMessageReadUrl(), null);
+		}
+		else
+		{
+			String[] urls = new String[msgs.length];
+			for (int i = 0; i < msgs.length; i++)
+			{
+				urls[i] = msgs[i].getMessageReadUrl();
+			}
+			Map<String, String[]> map = new HashMap<String, String[]>();
+			map.put("mark_as_read", urls);
+			
+			post("/api/user/" + this.username + "/messages/unread/", map);
+		}
 	}
 	
 	public void sendToAllUsers(Airmail airmail)
@@ -249,7 +283,7 @@ public class UrbanAirshipClient
 		Map<String, String[]> cancelMap = new HashMap<String, String[]>();
 		cancelMap.put("cancel", scheduledNotificationUrls);
 		
-		post("https://go.urbanairship.com/api/push/scheduled/", cancelMap);
+		post("https://" + getHostname() + "/api/push/scheduled/", cancelMap);
 		
 	}
 	
