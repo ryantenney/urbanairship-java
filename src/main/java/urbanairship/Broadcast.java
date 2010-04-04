@@ -1,4 +1,4 @@
-
+	
 package urbanairship;
 
 import java.util.*;
@@ -24,9 +24,9 @@ public class Broadcast implements java.io.Serializable
 		return scheduleFor;
 	}
 	
-	public void setScheduleFor(Calendar scheduleFor)
+	public void setScheduleFor(Calendar sfor)
 	{
-		this.scheduleFor = scheduleFor;
+		this.scheduleFor = sfor;
 	}
 	
 	public List<String> getExcludeTokens()

@@ -11,23 +11,23 @@ public class GsonFactory
 
 	public static Gson create()
 	{
+		CalendarAdapter calAdapter = new CalendarAdapter();
+		
 		GsonBuilder builder = new GsonBuilder();
 		return builder.setPrettyPrinting()
-						.setDateFormat(ISO8601.PATTERN)
 						.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-						.registerTypeAdapter(java.util.Calendar.class, new CalendarAdapter())
+						.registerTypeAdapter(java.util.Calendar.class, calAdapter)
+						.registerTypeAdapter(java.util.GregorianCalendar.class, calAdapter)
 						.create();
 	}
 	
 	public static class CalendarAdapter
-		implements JsonSerializer, JsonDeserializer<java.util.Calendar>
+		implements JsonSerializer<java.util.Calendar>, JsonDeserializer<java.util.Calendar>
 	{
 
-		public JsonElement serialize(Object arg0, Type arg1,
+		public JsonElement serialize(java.util.Calendar c, Type arg1,
 				JsonSerializationContext arg2)
 		{
-			Calendar c = (Calendar) arg0;
-			
 			JsonElement element = new JsonPrimitive(ISO8601.toString(c));
 			return element;
 		}

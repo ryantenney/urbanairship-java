@@ -29,7 +29,7 @@ public class UrbanAirshipClientTest
 		}
 	}
 	
-	@Test
+	@Test(enabled=false)
 	public void client()
 	{
 		UrbanAirshipClient client = new UrbanAirshipClient(true, username, password);
@@ -43,6 +43,11 @@ public class UrbanAirshipClientTest
 	@Test
 	public void json()
 	{
+		APS aps = new APS();
+		
+		aps.setAlert("You've got mail!");
+		aps.setBadge(1);
+		
 		Calendar c = Calendar.getInstance();
 
 		c.add(Calendar.DAY_OF_YEAR, 1);
@@ -51,6 +56,9 @@ public class UrbanAirshipClientTest
 		bcast.setScheduleFor(c);
 
 		Assert.assertNotNull(bcast.getScheduleFor());
+		
+		
+		bcast.setAps(aps);
 		
 		Gson gson = GsonFactory.create();
 		
