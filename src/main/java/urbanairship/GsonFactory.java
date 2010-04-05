@@ -20,8 +20,9 @@ public class GsonFactory
 						.registerTypeAdapter(java.util.GregorianCalendar.class, calAdapter)
 						.create();
 	}
+
 	
-	public static class CalendarAdapter
+	private  static class CalendarAdapter
 		implements JsonSerializer<java.util.Calendar>, JsonDeserializer<java.util.Calendar>
 	{
 
