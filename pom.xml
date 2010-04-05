@@ -2,13 +2,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>urbanairship</groupId>
     <artifactId>urbanairship-java</artifactId>
-    <version>DEV</version>
+    <version>0.1-SNAPSHOT</version>
     <name>Urban Airship Java</name>
     <packaging>jar</packaging>
-    <url>http://foo/urbanairship-java</url>
+    <url>http://bitbucket.org/sullis/urbanairship-java/</url>
     <scm>
-        <connection>scm:svn:http://urbanairship-java-api.googlecode.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://urbanairship-java-api.googlecode.com/svn/trunk/</developerConnection>
+        <connection>scm:hg:http://bitbucket.org/sullis/urbanairship-java/</connection>
+        <developerConnection>scm:hg:https://bitbucket.org/sullis/urbanairship-java/</developerConnection>
     </scm>
     
     <repositories>
@@ -80,7 +80,7 @@
 		<dependency>
 	      <groupId>org.testng</groupId>
 	      <artifactId>testng</artifactId>
-	      <version>5.11</version>
+	      <version>5.12</version>
 	      <scope>test</scope>
 	      <classifier>jdk15</classifier>
 	    </dependency>
