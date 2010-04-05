@@ -38,10 +38,32 @@ public class UrbanAirshipClientTest
 		dtoken.setToken("todo");
 		
 		client.register(dtoken);
+
+	}
+	
+	
+	@Test
+	public void jsonPush()
+	{
+		APS aps = new APS();
+		aps.setAlert("Hello world");
+		aps.setAutoBadge("+1");
+		
+		Push p = new Push();
+		p.setAps(aps);
+		
+		Gson gson = GsonFactory.create();
+		
+		String json = gson.toJson(p);
+		
+		Assert.assertNotNull(json);
+
+		System.out.println("Push: " + json);
+		
 	}
 	
 	@Test
-	public void json()
+	public void jsonCalendar()
 	{
 		APS aps = new APS();
 		
@@ -66,7 +88,7 @@ public class UrbanAirshipClientTest
 		
 		Assert.assertNotNull(json);
 
-		System.out.println(json);
+		System.out.println("Broadcast: " + json);
 		
 		Broadcast bcast2 = gson.fromJson(json, Broadcast.class);
 		

@@ -12,6 +12,11 @@ public class APS implements java.io.Serializable
 	private String alert;
 	private String sound;
 	
+	public boolean isAutoBadge()
+	{
+		return (this.badge instanceof String);
+	}
+	
 	public Integer getBadgeAsInteger()
 	{
 		if (this.badge instanceof Integer)
@@ -25,7 +30,7 @@ public class APS implements java.io.Serializable
 	}
 	
 	
-	public String getBadgetAsString()
+	public String getBadgeAsString()
 	{
 		if (this.badge instanceof String)
 		{
@@ -41,24 +46,32 @@ public class APS implements java.io.Serializable
 	 * 
 	 * use this method for autobadge
 	 * 
-	 * @param badge  "auto"   or "+1"  or "-1"
+	 * @param strAutoBadge  "auto"   or "+1"  or "-1"
 	 * 
 	 * @see #setBadge(Integer)
 	 * 
 	 */
-	public void setBadge(String strBadge)
+	public void setAutoBadge(String strAutoBadge)
 	{
-		if ( (strBadge != null) 
-				&& (!strBadge.equalsIgnoreCase("auto"))
-				&& (!strBadge.startsWith("+"))
-				&& (!strBadge.startsWith("-")) )
+		if ( (strAutoBadge != null) 
+				&& (!strAutoBadge.equals("auto"))
+				&& (!strAutoBadge.startsWith("+"))
+				&& (!strAutoBadge.startsWith("-")) )
 		{
-			throw new IllegalArgumentException("strBadge parameter: " + strBadge);
+			throw new IllegalArgumentException("strAutoBadge parameter: " + strAutoBadge);
 		}
 		
-		this.badge = strBadge;
+		this.badge = strAutoBadge;
 	}
 	
+	
+	/**
+	 * 
+	 * @param iBadge
+	 * 
+	 * @see #setAutoBadge(String)
+	 * 
+	 */
 	public void setBadge(Integer iBadge)
 	{
 		this.badge = iBadge;

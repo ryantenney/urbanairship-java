@@ -11,6 +11,12 @@ public class Push implements java.io.Serializable
 	private List<Calendar> scheduleFor = new ArrayList<Calendar>();
 	private List<String> excludeTokens = new ArrayList<String>();
 	private APS aps;
+	private Map<String, Object> payload = new HashMap<String, Object>();
+	
+	public void addPayloadValue(String key, Object value) 
+	{
+		this.payload.put(key, value);
+	}
 	
 	public List<String> getDeviceTokens()
 	{
