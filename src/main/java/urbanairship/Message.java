@@ -105,6 +105,10 @@ public class Message
 	{
 		this.message = message;
 	}
-	
+
+	public String toString()
+	{
+		return "messageId=" + getMessageId();
+	}
 	
 }
