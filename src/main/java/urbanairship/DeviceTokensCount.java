@@ -1,7 +1,7 @@
 
 package urbanairship;
 
-public class DeviceTokensCount
+public class DeviceTokensCount implements java.io.Serializable
 {
 	private Integer deviceTokensCount;
 	private Integer activeDeviceTokensCount;

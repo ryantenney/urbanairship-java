@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class Payload
+public class Payload implements java.io.Serializable
 {
 	private List<String> deviceTokens = new ArrayList<String>();
 	private APS aps;

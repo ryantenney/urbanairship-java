@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class Airmail
+public class Airmail implements java.io.Serializable
 {
 	private Push push;
 	private List<String> tags;

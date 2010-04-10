@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class Message
+public class Message implements java.io.Serializable
 {
 	private String messageId;
 	private String messageUrl;

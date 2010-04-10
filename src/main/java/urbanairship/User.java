@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class User
+public class User implements java.io.Serializable
 {
 	private boolean airmail = false;
 	private String alias;

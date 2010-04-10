@@ -1,7 +1,7 @@
 
 package urbanairship;
 
-public class UserCredentials
+public class UserCredentials implements java.io.Serializable
 {
 	private String userUrl;
 	private String userId;
@@ -37,5 +37,9 @@ public class UserCredentials
 		this.password = password;
 	}
 	
+	public String toString()
+	{
+		return this.getUserId();
+	}
 	
 }

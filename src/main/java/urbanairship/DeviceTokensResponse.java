@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class DeviceTokensResponse
+public class DeviceTokensResponse implements java.io.Serializable
 {
 	private Integer deviceTokensCount;
 	public List<DeviceToken> deviceTokens = new ArrayList<DeviceToken>();

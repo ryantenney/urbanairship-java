@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class Stat
+public class Stat implements java.io.Serializable
 {
 	private Calendar time;
 	private Integer count;

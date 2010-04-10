@@ -3,7 +3,7 @@ package urbanairship;
 
 import java.util.*;
 
-public class ScheduleFor
+public class ScheduleFor implements java.io.Serializable
 {
 	private String alias;
 	private Calendar scheduledTime;
