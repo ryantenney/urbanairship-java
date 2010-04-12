@@ -6,17 +6,22 @@ import java.util.List;
 
 public class Messages implements java.io.Serializable, java.lang.Iterable<Message>
 {
-	private String badge;
+	private Integer badge;
 	private List<Message> messages;
 	
-	public String getBadge()
+	public Integer getBadge()
 	{
 		return badge;
 	}
 	
-	public void setBadge(String badge)
+	public void setBadge(Integer badge)
 	{
 		this.badge = badge;
+	}
+	
+	public Integer getNumberOfUnreadMessages()
+	{
+		return this.getBadge();
 	}
 	
 	public List<Message> getMessages()
