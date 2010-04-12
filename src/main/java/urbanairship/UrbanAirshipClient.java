@@ -22,20 +22,19 @@ import com.google.gson.Gson;
 public class UrbanAirshipClient
 {
 	private static final String CHARSET = "UTF-8";
-	private boolean production = false;
+	// private boolean production = false;
 	private String username;
 	private String password;
 	private String userAgent = this.getClass().getName(); 
 	private HttpClient httpClient;
 
-	public UrbanAirshipClient(boolean isProduction, String username, String password)
+	public UrbanAirshipClient(String username, String password)
 	{
-		this(isProduction, username, password, null);
+		this(username, password, null);
 	}
 	
-	public UrbanAirshipClient(boolean isProduction, String username, String password, HttpClient hc)
+	public UrbanAirshipClient(String username, String password, HttpClient hc)
 	{
-		this.production = isProduction;
 		this.username = username;
 		this.password = password;
 		this.httpClient = hc;
@@ -490,10 +489,11 @@ public class UrbanAirshipClient
 		return "go.urbanairship.com";
 	}
 	
+	/*
 	protected boolean isProduction()
 	{
 		return this.production;
-	}
+	} */
 
 	public List<Feedback> getFeedback(final long since)
 	{
