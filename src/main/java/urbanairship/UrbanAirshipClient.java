@@ -165,6 +165,16 @@ public class UrbanAirshipClient
 		return get(Messages.class, uri);
 	}
 	
+	public Messages getMessages()
+	{
+		return getMessages(true);
+	}
+	
+	public Messages getMessages(boolean fullList)
+	{
+		return getMessagesByUserId(this.username, fullList);
+	}
+	
 	public String getMessageBody(String messageBodyUrl)
 	{
 		return getString(messageBodyUrl);
