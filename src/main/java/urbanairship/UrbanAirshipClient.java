@@ -265,9 +265,9 @@ public class UrbanAirshipClient
 	 * @return may return null
 	 * 
 	 */
-	public ScheduledNotifications sendPushNotifications(Push... p)
+	public PushResponse sendPushNotifications(Push... p)
 	{
-		ScheduledNotifications result = null;
+		PushResponse result = null;
 		
 		if (p.length == 0)
 		{
@@ -276,12 +276,12 @@ public class UrbanAirshipClient
 		else if (p.length == 1)
 		{
 			// single push notification
-			result = post("/api/push/", p[0], ScheduledNotifications.class);
+			result = post("/api/push/", p[0], PushResponse.class);
 		}
 		else
 		{
 			// batch of push notifications
-			result = post("/api/push/batch/", p, ScheduledNotifications.class);
+			result = post("/api/push/batch/", p, PushResponse.class);
 		}
 		
 		return result;
