@@ -1,19 +1,26 @@
 
 package urbanairship;
 
+import java.util.*;
+
 public class PushResponse implements java.io.Serializable
 {
-	private ScheduledNotifications scheduledNotifications;
+	private List<String> scheduledNotifications = new ArrayList<String>();
 
-	public ScheduledNotifications getScheduledNotifications()
+	public List<String> getScheduledNotifications()
 	{
+		if (scheduledNotifications == null)
+		{
+			scheduledNotifications = new ArrayList<String>();
+		}
+		
 		return scheduledNotifications;
 	}
 
 	public void setScheduledNotifications(
-			ScheduledNotifications scheduledNotifications)
+			List<String> urls)
 	{
-		this.scheduledNotifications = scheduledNotifications;
+		this.scheduledNotifications = urls;
 	}
 	
 	public boolean hasScheduledNotifications()
