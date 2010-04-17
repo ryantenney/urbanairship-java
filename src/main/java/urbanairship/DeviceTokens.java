@@ -8,7 +8,7 @@ import java.util.*;
  * @see DeviceToken
  *
  */
-public class DeviceTokens implements java.io.Serializable
+public class DeviceTokens implements java.io.Serializable, java.lang.Iterable<DeviceToken>
 {
 	private Integer deviceTokensCount;
 	private List<DeviceToken> deviceTokens = new ArrayList<DeviceToken>();
@@ -75,6 +75,11 @@ public class DeviceTokens implements java.io.Serializable
 	public void setNextPage(String nextPage)
 	{
 		this.nextPage = nextPage;
+	}
+
+	public Iterator<DeviceToken> iterator()
+	{
+		return this.getDeviceTokens().iterator();
 	}
 	
 	
