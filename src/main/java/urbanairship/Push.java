@@ -28,6 +28,11 @@ public class Push implements java.io.Serializable
 		this.deviceTokens = deviceTokens;
 	}
 	
+	public void addDeviceToken(String token)
+	{
+		this.getDeviceTokens().add(token);
+	}
+	
 	public List<String> getAliases()
 	{
 		return aliases;
@@ -38,6 +43,11 @@ public class Push implements java.io.Serializable
 		this.aliases = aliases;
 	}
 	
+	public void addAlias(String alias)
+	{
+		this.getAliases().add(alias);
+	}
+	
 	public List<String> getTags()
 	{
 		return tags;
@@ -46,6 +56,11 @@ public class Push implements java.io.Serializable
 	public void setTags(List<String> tags)
 	{
 		this.tags = tags;
+	}
+	
+	public void addTag(String tag)
+	{
+		this.getTags().add(tag);
 	}
 	
 	public List<Calendar> getScheduleFor()
