@@ -25,7 +25,6 @@ public class UrbanAirshipClient
 	// private boolean production = false;
 	private String username;
 	private String password;
-	private String userAgent = this.getClass().getName(); 
 	private HttpClient httpClient;
 
 	public UrbanAirshipClient(String username, String password)
@@ -267,6 +266,8 @@ public class UrbanAirshipClient
 	 */
 	public PushResponse sendPushNotifications(Push... p)
 	{
+		Class<PushResponse> responseClazz = PushResponse.class;
+		
 		PushResponse result = null;
 		
 		if (p.length == 0)
@@ -276,12 +277,12 @@ public class UrbanAirshipClient
 		else if (p.length == 1)
 		{
 			// single push notification
-			result = post("/api/push/", p[0], PushResponse.class);
+			result = post("/api/push/", p[0], responseClazz);
 		}
 		else
 		{
 			// batch of push notifications
-			result = post("/api/push/batch/", p, PushResponse.class);
+			result = post("/api/push/batch/", p, responseClazz);
 		}
 		
 		return result;
@@ -334,52 +335,101 @@ public class UrbanAirshipClient
 		}
 		catch (Exception ex)
 		{
-			throw new RuntimeException(ex);
+			Class clazz = null;
+			if (obj != null)
+			{
+				clazz = obj.getClass();
+			}
+			throw new RuntimeException("failure, obj class=" + clazz, ex);
 		}
 		
 	}
 
 	protected void checkResponse(HttpRequest request, HttpResponse response)
 	{
+		boolean hasError = false;
 		
-		StatusLine status = response.getStatusLine();
-		
-		int statusCode = status.getStatusCode();
-		
-	
-		if (statusCode == 404)
+		try
 		{
-			throw new NotFoundException(status.getReasonPhrase());
+			StatusLine status = response.getStatusLine();
+			
+			int statusCode = status.getStatusCode();
+			
+		
+			if (statusCode == 404)
+			{
+				hasError = true;
+				throw new NotFoundException(status.getReasonPhrase());
+			}
+			else if ( (statusCode < 200) || (statusCode > 299) )
+			{
+				hasError = true;
+				
+				StringBuilder msg = new StringBuilder();
+				
+				msg.append("statusCode=" + statusCode);
+				
+				msg.append("\n");
+				
+				msg.append("method=" + request.getRequestLine().getMethod());
+				
+				msg.append("\n");
+				
+				msg.append(request.getRequestLine().getUri());
+				
+				
+				HttpEntity responseEntity = response.getEntity();
+				
+				try
+				{
+					String responseBody = EntityUtils.toString(responseEntity);
+					msg.append("\n");
+					msg.append("responseBody=" + responseBody);
+				}
+				catch (Exception ignored)
+				{
+					// ignored
+				}
+
+				throw new RuntimeException("unexpected response\n" + msg);
+			}
 		}
-		else if ( (statusCode < 200) || (statusCode > 299) )
+		finally
 		{
-			
-			StringBuilder msg = new StringBuilder();
-			
-			msg.append("statusCode=" + statusCode);
-			
-			msg.append("\n");
-			
-			msg.append("method=" + request.getRequestLine().getMethod());
-			
-			msg.append("\n");
-			
-			msg.append(request.getRequestLine().getUri());
-			
-			
+			if (hasError)
+			{
+				close(response);
+			}
+		}
+	}
+
+	private void close(final HttpResponse resp)
+	{
+		if (resp != null)
+		{
 			try
 			{
-				String responseBody = EntityUtils.toString(response.getEntity());
-				msg.append("\n");
-				msg.append("responseBody=" + responseBody);
+				close(resp.getEntity());
 			}
 			catch (Exception ignored)
 			{
 				// ignored
 			}
-			
-			
-			throw new RuntimeException("unexpected response\n" + msg);
+		}
+	}
+	
+	private void close(final HttpEntity responseEntity)
+	{
+		if (responseEntity != null)
+		{
+			try
+			{
+				responseEntity.consumeContent();
+			}
+			catch (Exception ignored)
+			{
+				// ignored
+			}
 		}
 	}
 
@@ -407,6 +457,10 @@ public class UrbanAirshipClient
 		catch (Exception e)
 		{
 			throw new RuntimeException(e);
+		}
+		finally
+		{
+			close(rsp);
 		}
 	}
 	
@@ -448,7 +502,7 @@ public class UrbanAirshipClient
 	{
 		DefaultHttpClient client = new DefaultHttpClient();
 		
-		client.getParams().setParameter(AllClientPNames.USER_AGENT, this.userAgent);
+		client.getParams().setParameter(AllClientPNames.USER_AGENT, "urbanairship-java library");
 
 		CredentialsProvider credProvider = new BasicCredentialsProvider();
 		
@@ -471,7 +525,7 @@ public class UrbanAirshipClient
 		return this.password;
 	}
 
-	private HttpPost createHttpPost(String path)
+	private HttpPost createHttpPost(final String path)
 	{
 		String url = getUrlForPath(path);
 		
@@ -480,7 +534,7 @@ public class UrbanAirshipClient
 		return post;
 	}
 
-	protected String getUrlForPath(String path)
+	protected String getUrlForPath(final String path)
 	{
 		if (path.startsWith("http://") || (path.startsWith("https://")))
 		{
@@ -505,7 +559,7 @@ public class UrbanAirshipClient
 		return this.production;
 	} */
 
-	public List<Feedback> getFeedback(final long since)
+	public FeedbackList getFeedback(final long since)
 	{
 		if (since < 0)
 		{
@@ -547,6 +601,10 @@ public class UrbanAirshipClient
 		{
 			throw new RuntimeException(ex);
 		}
+		finally
+		{
+			close(rsp);
+		}
 	}
 	
 	protected <T> T get(final Class<T> clazz, final String path, final String... parameters)
@@ -562,7 +620,7 @@ public class UrbanAirshipClient
 	{
 		if (object == null)
 		{
-			throw new NullPointerException("object parameter is null");
+			throw new IllegalArgumentException("object parameter is null");
 		}
 		
 		Gson gson = GsonFactory.create();
@@ -616,5 +674,31 @@ public class UrbanAirshipClient
 		}
 		
 	}
+
+	public void setUserAgent(String agentString)
+	{
+		if (agentString == null)
+		{
+			this.getHttpClient().getParams().removeParameter(AllClientPNames.USER_AGENT);
+		}
+		else
+		{
+			this.getHttpClient().getParams().setParameter(AllClientPNames.USER_AGENT, agentString);
+		}
+	}
 	
+	public void shutdown()
+	{
+		if (this.getHttpClient() != null)
+		{
+			try
+			{
+				this.getHttpClient().getConnectionManager().shutdown();
+			}
+			catch (Exception ignored)
+			{
+				// ignored
+			}
+		}
+	}
 }
