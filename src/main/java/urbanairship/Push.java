@@ -5,11 +5,11 @@ import java.util.*;
 
 public class Push implements java.io.Serializable
 {
-	private List<String> deviceTokens = new ArrayList<String>();
-	private List<String> aliases = new ArrayList<String>();
-	private List<String> tags = new ArrayList<String>();
-	private List<Calendar> scheduleFor = new ArrayList<Calendar>();
-	private List<String> excludeTokens = new ArrayList<String>();
+	private List<String> deviceTokens;
+	private List<String> aliases;
+	private List<String> tags;
+	private List<Calendar> scheduleFor;
+	private List<String> excludeTokens;
 	private APS aps;
 	private Map<String, Object> payload = new HashMap<String, Object>();
 	
