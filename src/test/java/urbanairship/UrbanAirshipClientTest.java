@@ -32,7 +32,7 @@ public class UrbanAirshipClientTest
 	@Test(enabled=false)
 	public void client()
 	{
-		UrbanAirshipClient client = new UrbanAirshipClient(true, username, password);
+		UrbanAirshipClient client = new UrbanAirshipClient(username, password);
 		
 		DeviceToken dtoken = new DeviceToken();
 		dtoken.setToken("todo");
