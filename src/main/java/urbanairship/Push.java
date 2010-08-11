@@ -5,12 +5,14 @@ import java.util.*;
 
 public class Push implements java.io.Serializable
 {
+	private List<String> apids;
 	private List<String> deviceTokens;
 	private List<String> aliases;
 	private List<String> tags;
 	private List<Calendar> scheduleFor;
 	private List<String> excludeTokens;
 	private APS aps;
+	private Android android;
 	private Map<String, Object> payload = new HashMap<String, Object>();
 	
 	public void addPayloadValue(String key, Object value) 
@@ -30,6 +32,10 @@ public class Push implements java.io.Serializable
 	
 	public void addDeviceToken(String token)
 	{
+		if (this.deviceTokens == null)
+		{
+			this.deviceTokens = new ArrayList<String>();
+		}
 		this.getDeviceTokens().add(token);
 	}
 	
@@ -68,6 +74,15 @@ public class Push implements java.io.Serializable
 		return scheduleFor;
 	}
 	
+	public void addScheduleFor(Calendar c)
+	{
+		if (this.scheduleFor == null)
+		{
+			this.scheduleFor = new ArrayList<Calendar>();
+		}
+		this.scheduleFor.add(c);
+	}
+	
 	public void setScheduleFor(List<Calendar> scheduleFor)
 	{
 		this.scheduleFor = scheduleFor;
@@ -91,6 +106,26 @@ public class Push implements java.io.Serializable
 	public void setAps(APS aps)
 	{
 		this.aps = aps;
+	}
+
+	public List<String> getApids()
+	{
+		return apids;
+	}
+
+	public void setApids(List<String> apids)
+	{
+		this.apids = apids;
+	}
+
+	public Android getAndroid()
+	{
+		return android;
+	}
+
+	public void setAndroid(Android android)
+	{
+		this.android = android;
 	}
 	
 	
