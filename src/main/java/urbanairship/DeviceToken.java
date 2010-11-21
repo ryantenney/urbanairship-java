@@ -13,14 +13,18 @@ import java.util.*;
  */
 public class DeviceToken implements java.io.Serializable
 {
-	private String token;
-	private boolean active = true;
 	private String alias;
+	private String deviceToken;
+	private List<String> tags;
+	private boolean active = true;
 	private Calendar lastRegistration;
+	private Integer badge;
+	private String tz; // timezone
+	private QuietTime quiettime;
 	
-	public String getToken()
+	public String getDeviceToken()
 	{
-		return token;
+		return deviceToken;
 	}
 	
 	/**
@@ -41,7 +45,7 @@ public class DeviceToken implements java.io.Serializable
 		}
 		
 		
-		this.token = tkn;
+		this.deviceToken = tkn;
 		
 	}
 	
@@ -73,6 +77,51 @@ public class DeviceToken implements java.io.Serializable
 	public void setLastRegistration(Calendar lastRegistration)
 	{
 		this.lastRegistration = lastRegistration;
+	}
+
+	public List<String> getTags()
+	{
+		return tags;
+	}
+
+	public void setTags(List<String> tags)
+	{
+		this.tags = tags;
+	}
+
+	public Integer getBadge()
+	{
+		return badge;
+	}
+
+	public void setBadge(Integer badge)
+	{
+		this.badge = badge;
+	}
+
+	public String getTz()
+	{
+		return tz;
+	}
+
+	public void setTz(String tz)
+	{
+		this.tz = tz;
+	}
+
+	public QuietTime getQuiettime()
+	{
+		return quiettime;
+	}
+
+	public void setQuiettime(QuietTime quiettime)
+	{
+		this.quiettime = quiettime;
+	}
+
+	public void setDeviceToken(String deviceToken)
+	{
+		this.deviceToken = deviceToken;
 	}
 
 

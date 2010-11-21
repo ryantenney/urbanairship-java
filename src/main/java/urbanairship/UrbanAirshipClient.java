@@ -84,7 +84,7 @@ public class UrbanAirshipClient
 	
 	public void register(DeviceToken dt)
 	{
-		String token = dt.getToken();
+		String token = dt.getDeviceToken();
 		put("/api/device_tokens/" + encode(token), dt);
 	}
 	

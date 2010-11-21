@@ -13,6 +13,8 @@ public class Push implements java.io.Serializable
 	private List<String> excludeTokens;
 	private APS aps;
 	private Android android;
+	private Blackberry blackberry;
+	private String url;
 	private Map<String, Object> payload = new HashMap<String, Object>();
 	
 	public void addPayloadValue(String key, Object value) 
@@ -128,6 +130,24 @@ public class Push implements java.io.Serializable
 		this.android = android;
 	}
 	
+	public void setBlackberry(Blackberry b)
+	{
+		this.blackberry = b;
+	}
 	
+	public Blackberry getBlackberry()
+	{
+		return this.blackberry;
+	}
+
+	public void setUrl(String u)
+	{
+		this.url = u;
+	}
+	
+	public String getUrl()
+	{
+		return this.url;
+	}
 	
 }
