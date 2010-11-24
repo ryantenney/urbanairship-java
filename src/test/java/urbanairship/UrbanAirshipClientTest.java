@@ -34,10 +34,10 @@ public class UrbanAirshipClientTest
 	{
 		UrbanAirshipClient client = new UrbanAirshipClient(username, password);
 		
-		DeviceToken dtoken = new DeviceToken();
-		dtoken.setToken("todo");
+		Device dev = new Device();
+		dev.setiOSDeviceToken("todo");
 		
-		client.register(dtoken);
+		client.register(dev);
 
 	}
 	

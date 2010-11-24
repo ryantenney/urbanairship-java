@@ -5,17 +5,17 @@ import java.util.*;
 
 /**
  * 
- * @see DeviceToken
+ * @see Device
  *
  */
-public class DeviceTokens implements java.io.Serializable, java.lang.Iterable<DeviceToken>
+public class DeviceTokens implements java.io.Serializable, java.lang.Iterable<Device>
 {
 	private Integer deviceTokensCount;
-	private List<DeviceToken> deviceTokens = new ArrayList<DeviceToken>();
+	private Integer activeDeviceTokensCount;
+	private List<Device> deviceTokens = new ArrayList<Device>();
 	private Integer currentPage;
 	private Integer numPages;
-	private Integer activeDeviceTokensCount;
-	private String nextPage;
+	private String nextPage; // nextPage is a url 
 	
 	public Integer getDeviceTokensCount()
 	{
@@ -27,12 +27,12 @@ public class DeviceTokens implements java.io.Serializable, java.lang.Iterable<De
 		this.deviceTokensCount = deviceTokensCount;
 	}
 	
-	public List<DeviceToken> getDeviceTokens()
+	public List<Device> getDeviceTokens()
 	{
 		return deviceTokens;
 	}
 	
-	public void setDeviceTokens(List<DeviceToken> deviceTokens)
+	public void setDeviceTokens(List<Device> deviceTokens)
 	{
 		this.deviceTokens = deviceTokens;
 	}
@@ -67,6 +67,12 @@ public class DeviceTokens implements java.io.Serializable, java.lang.Iterable<De
 		this.activeDeviceTokensCount = activeDeviceTokensCount;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @return next page url
+	 * 
+	 */
 	public String getNextPage()
 	{
 		return nextPage;
@@ -77,7 +83,7 @@ public class DeviceTokens implements java.io.Serializable, java.lang.Iterable<De
 		this.nextPage = nextPage;
 	}
 
-	public Iterator<DeviceToken> iterator()
+	public Iterator<Device> iterator()
 	{
 		return this.getDeviceTokens().iterator();
 	}

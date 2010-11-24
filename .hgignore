@@ -1,5 +1,4 @@
 bin
-
 syntax: regexp
 ^test-output$
 syntax: regexp

@@ -82,10 +82,37 @@ public class UrbanAirshipClient
 		}
 	}
 	
-	public void register(DeviceToken dt)
+	public void register(Device dev)
 	{
-		String token = dt.getDeviceToken();
-		put("/api/device_tokens/" + encode(token), dt);
+		String identifier = null;
+		String path = null;
+		
+		if (dev.getiOSDeviceToken() != null)
+		{
+			identifier = dev.getiOSDeviceToken();
+			path = "device_tokens";
+		}
+		else if (dev.getAndroidAPID() != null)
+		{
+			identifier = dev.getAndroidAPID();
+			path = "apids";
+		}
+		else if (dev.getBlackberryDevicePin() != null)
+		{
+			identifier = dev.getBlackberryDevicePin();
+			path = "device_pins";
+		}
+		
+		if ( (identifier == null) || (identifier.trim().length() == 0) )
+		{
+			throw new IllegalStateException("missing device identifier");
+		}
+		
+		put("/api/" 
+				+ path 
+				+ "/" 
+				+ encode(identifier), 
+				dev);
 	}
 	
 	public UserCredentials create(User u)
@@ -242,9 +269,9 @@ public class UrbanAirshipClient
 		return put;
 	}
 
-	public DeviceToken getDeviceToken(String deviceToken)
+	public Device getDeviceToken(String deviceToken)
 	{
-		return get(DeviceToken.class, "/api/device_tokens/" + encode(deviceToken)); 
+		return get(Device.class, "/api/device_tokens/" + encode(deviceToken)); 
 	}
 	
 	public DeviceTokensResponse getDeviceTokens()

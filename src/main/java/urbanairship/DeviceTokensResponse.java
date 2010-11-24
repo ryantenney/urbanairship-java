@@ -6,7 +6,7 @@ import java.util.*;
 public class DeviceTokensResponse implements java.io.Serializable
 {
 	private Integer deviceTokensCount;
-	public List<DeviceToken> deviceTokens = new ArrayList<DeviceToken>();
+	public List<Device> deviceTokens = new ArrayList<Device>();
 	private Integer currentPage;
 	private Integer numPages;
 	private Integer activeDeviceTokensCount;
@@ -21,12 +21,12 @@ public class DeviceTokensResponse implements java.io.Serializable
 		this.deviceTokensCount = deviceTokensCount;
 	}
 	
-	public List<DeviceToken> getDeviceTokens()
+	public List<Device> getDeviceTokens()
 	{
 		return deviceTokens;
 	}
 	
-	public void setDeviceTokens(List<DeviceToken> deviceTokens)
+	public void setDeviceTokens(List<Device> deviceTokens)
 	{
 		this.deviceTokens = deviceTokens;
 	}
