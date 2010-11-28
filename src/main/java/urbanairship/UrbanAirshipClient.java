@@ -84,24 +84,9 @@ public class UrbanAirshipClient
 	
 	public void register(Device dev)
 	{
-		String identifier = null;
-		String path = null;
 		
-		if (dev.getiOSDeviceToken() != null)
-		{
-			identifier = dev.getiOSDeviceToken();
-			path = "device_tokens";
-		}
-		else if (dev.getAndroidAPID() != null)
-		{
-			identifier = dev.getAndroidAPID();
-			path = "apids";
-		}
-		else if (dev.getBlackberryDevicePin() != null)
-		{
-			identifier = dev.getBlackberryDevicePin();
-			path = "device_pins";
-		}
+		String identifier = dev.getIdentifier();
+		String path = dev.getPath();
 		
 		if ( (identifier == null) || (identifier.trim().length() == 0) )
 		{
@@ -493,7 +478,7 @@ public class UrbanAirshipClient
 	
 	public List<Stat> getPushStats(Calendar start, Calendar end)
 	{
-		// todo 
+		// TODO 
 		return null;
 	}
 	

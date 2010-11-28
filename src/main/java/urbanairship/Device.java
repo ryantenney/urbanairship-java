@@ -146,6 +146,43 @@ public class Device implements java.io.Serializable
 		this.androidAPID = apid;
 	}
 
+	public String getPath()
+	{
+		String path = null;
+		
+		if (this.getiOSDeviceToken() != null)
+		{
+			path = "device_tokens";
+		}
+		else if (this.getAndroidAPID() != null)
+		{
+			path = "apids";
+		}
+		else if (this.getBlackberryDevicePin() != null)
+		{
+			path = "device_pins";
+		}
+		
+		return path;
+	}
 
-
+	public String getIdentifier()
+	{
+		String identifier = null;
+		
+		if (this.getiOSDeviceToken() != null)
+		{
+			identifier = getiOSDeviceToken();
+		}
+		else if (this.getAndroidAPID() != null)
+		{
+			identifier = this.getAndroidAPID();
+		}
+		else if (this.getBlackberryDevicePin() != null)
+		{
+			identifier = this.getBlackberryDevicePin();
+		}
+		
+		return identifier;
+	}
 }

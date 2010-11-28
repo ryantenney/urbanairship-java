@@ -8,7 +8,7 @@ import java.util.*;
  * @see Device
  *
  */
-public class DeviceTokens implements java.io.Serializable, java.lang.Iterable<Device>
+public class Devices implements java.io.Serializable, java.lang.Iterable<Device>
 {
 	private Integer deviceTokensCount;
 	private Integer activeDeviceTokensCount;
