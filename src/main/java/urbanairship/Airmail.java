@@ -3,6 +3,11 @@ package urbanairship;
 
 import java.util.*;
 
+/**
+ * 
+ *  @see http://urbanairship.com/products/airmail/
+ *
+ */
 public class Airmail implements java.io.Serializable
 {
 	private Push push;
@@ -83,6 +88,7 @@ public class Airmail implements java.io.Serializable
 		this.extra = extra;
 	}
 
+	@Override
 	public String toString()
 	{
 		return this.getMessage();
