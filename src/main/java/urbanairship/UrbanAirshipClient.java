@@ -22,7 +22,6 @@ import com.google.gson.Gson;
 public class UrbanAirshipClient
 {
 	private static final String CHARSET = "UTF-8";
-	// private boolean production = false;
 	private String username;
 	private String password;
 	private HttpClient httpClient;
@@ -30,6 +29,10 @@ public class UrbanAirshipClient
 	public UrbanAirshipClient(String username, String password)
 	{
 		this(username, password, null);
+		
+		setConnectionTimeout(10 * 1000);
+		setSocketTimeout(30 * 1000);
+		
 	}
 	
 	public UrbanAirshipClient(String username, String password, HttpClient hc)
@@ -38,50 +41,7 @@ public class UrbanAirshipClient
 		this.password = password;
 		this.httpClient = hc;
 	}
-	
-	public List<String> getTags()
-	{
-		TagsResponse resp = get(TagsResponse.class, "/api/tags");
 
-		if (resp == null)
-		{
-			return new ArrayList<String>();
-		}
-		else
-		{
-			return resp.tags;
-		}
-	}
-	
-	public void addTagToDevice(String deviceToken, String tag)
-	{
-		if (tag.length() > 255)
-		{
-			throw new IllegalArgumentException("maximum tag length is 255. Tag: " + tag);
-		}
-		
-		put("/api/device_tokens/" + encode(deviceToken) + "/tags/" + encode(tag));
-	}
-	
-	public void removeTagFromDevice(String deviceToken, String tag)
-	{
-		delete("/api/device_tokens/" + encode(deviceToken) + "/tags/" + encode(tag));
-	}
-
-	public List<String> getTagsForDevice(String deviceToken)
-	{
-		TagsResponse resp = get(TagsResponse.class, "/api/device_tokens/" + encode(deviceToken) + "/tags");
-		
-		if (resp == null)
-		{
-			return new ArrayList<String>();
-		}
-		else
-		{
-			return resp.tags;
-		}
-	}
-	
 	public void register(Device dev)
 	{
 		
@@ -98,6 +58,82 @@ public class UrbanAirshipClient
 				+ "/" 
 				+ encode(identifier), 
 				dev);
+	}
+	
+	
+	public void addTagToDevice(String deviceToken, String tag)
+	{
+		if (tag.length() > 255)
+		{
+			throw new IllegalArgumentException("maximum tag length is 255. Tag: " + tag);
+		}
+		
+		put("/api/device_tokens/" + encode(deviceToken) + "/tags/" + encode(tag));
+	}
+	
+	public void removeTagFromDevice(String deviceToken, String tag)
+	{
+		delete("/api/device_tokens/" + encode(deviceToken) + "/tags/" + encode(tag));
+	}
+
+	/**
+	 * 
+	 * 
+	 * @return may return null
+	 * 
+	 */
+	public PushResponse sendPushNotifications(Push... p)
+	{
+		Class<PushResponse> responseClazz = PushResponse.class;
+		
+		PushResponse result = null;
+		
+		if (p.length == 0)
+		{
+			throw new IllegalArgumentException("parameter p");
+		}
+		else if (p.length == 1)
+		{
+			// single push notification
+			result = post("/api/push/", p[0], responseClazz);
+		}
+		else
+		{
+			// batch of push notifications
+			result = post("/api/push/batch/", p, responseClazz);
+		}
+		
+		return result;
+	}
+	
+
+	public List<String> getTags()
+	{
+		TagsResponse resp = get(TagsResponse.class, "/api/tags");
+
+		if (resp == null)
+		{
+			return new ArrayList<String>();
+		}
+		else
+		{
+			return resp.tags;
+		}
+	}
+	
+	
+	public List<String> getTagsForDevice(String deviceToken)
+	{
+		TagsResponse resp = get(TagsResponse.class, "/api/device_tokens/" + encode(deviceToken) + "/tags");
+		
+		if (resp == null)
+		{
+			return new ArrayList<String>();
+		}
+		else
+		{
+			return resp.tags;
+		}
 	}
 	
 	public UserCredentials create(User u)
@@ -254,7 +290,7 @@ public class UrbanAirshipClient
 		return put;
 	}
 
-	public Device getDeviceToken(String deviceToken)
+	public Device getDevice(String deviceToken)
 	{
 		return get(Device.class, "/api/device_tokens/" + encode(deviceToken)); 
 	}
@@ -270,36 +306,6 @@ public class UrbanAirshipClient
 		return get;
 	}
 
-	/**
-	 * 
-	 * 
-	 * @return may return null
-	 * 
-	 */
-	public PushResponse sendPushNotifications(Push... p)
-	{
-		Class<PushResponse> responseClazz = PushResponse.class;
-		
-		PushResponse result = null;
-		
-		if (p.length == 0)
-		{
-			throw new IllegalArgumentException("parameter p");
-		}
-		else if (p.length == 1)
-		{
-			// single push notification
-			result = post("/api/push/", p[0], responseClazz);
-		}
-		else
-		{
-			// batch of push notifications
-			result = post("/api/push/batch/", p, responseClazz);
-		}
-		
-		return result;
-	}
-	
 	public void cancelScheduledNotifications(String... scheduledNotificationUrls)
 	{
 		Map<String, String[]> cancelMap = new HashMap<String, String[]>();
@@ -565,12 +571,6 @@ public class UrbanAirshipClient
 		return "go.urbanairship.com";
 	}
 	
-	/*
-	protected boolean isProduction()
-	{
-		return this.production;
-	} */
-
 	public FeedbackList getFeedback(final long since)
 	{
 		if (since < 0)
@@ -713,4 +713,15 @@ public class UrbanAirshipClient
 			}
 		}
 	}
+	
+	public void setConnectionTimeout(int milliseconds)
+	{
+		getHttpClient().getParams().setIntParameter(AllClientPNames.CONNECTION_TIMEOUT, milliseconds);
+	}
+	
+	public void setSocketTimeout(int milliseconds)
+	{
+		getHttpClient().getParams().setIntParameter(AllClientPNames.SO_TIMEOUT, milliseconds);
+	}
+	
 }
