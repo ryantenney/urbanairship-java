@@ -3,7 +3,7 @@ package urbanairship;
 
 /**
  * 
- * APS: Apple Push Service
+ * APS: Apple Push notification Service
  *
  */
 public class APS implements java.io.Serializable

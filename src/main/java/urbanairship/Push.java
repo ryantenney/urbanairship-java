@@ -3,6 +3,12 @@ package urbanairship;
 
 import java.util.*;
 
+/**
+ * 
+ * 
+ *  Push notification message
+ *
+ */
 public class Push implements java.io.Serializable
 {
 	private List<String> apids;
