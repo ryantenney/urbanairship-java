@@ -6,6 +6,11 @@ import java.util.Calendar;
 
 import com.google.gson.*;
 
+/**
+ * 
+ * Google GSON helper class
+ *
+ */
 public class GsonFactory
 {
 
@@ -16,8 +21,7 @@ public class GsonFactory
 		GsonBuilder builder = new GsonBuilder();
 		return builder.setPrettyPrinting()
 						.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-						.registerTypeAdapter(java.util.Calendar.class, calAdapter)
-						.registerTypeAdapter(java.util.GregorianCalendar.class, calAdapter)
+						.registerTypeHierarchyAdapter(java.util.Calendar.class, calAdapter)
 						.create();
 	}
 
