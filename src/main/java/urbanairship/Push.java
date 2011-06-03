@@ -155,5 +155,29 @@ public class Push implements java.io.Serializable
 	{
 		return this.url;
 	}
+
+	public void setMessage(String msg)
+	{
+		if (msg == null)
+		{
+			clearMessage();
+		}
+		
+		this.android = new Android();
+		this.android.setAlert(msg);
+		
+		this.blackberry = new Blackberry();
+		this.blackberry.setBody(msg);
+		
+		this.aps = new APS();
+		this.aps.setAlert(msg);
+		
+	}
 	
+	public void clearMessage()
+	{
+		this.android = null;
+		this.blackberry = null;
+		this.aps = null;
+	}
 }
