@@ -19,19 +19,31 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 
+/**
+ * 
+ * 
+ *  Urban Airship REST API client
+ *
+ *  @see http://www.urbanairship.com/docs
+ *  
+ */
 public class UrbanAirshipClient
 {
 	private static final String CHARSET = "UTF-8";
+	private static final int DEFAULT_CONNECTION_TIMEOUT = (10 * 1000); // milliseconds
+	private static final int DEFAULT_SOCKET_TIMEOUT = (30 * 1000); // milliseconds
+
 	private String username;
 	private String password;
 	private HttpClient httpClient;
-
+	
 	public UrbanAirshipClient(String username, String password)
 	{
 		this(username, password, null);
 		
-		setConnectionTimeout(10 * 1000);
-		setSocketTimeout(30 * 1000);
+		setSocketTimeout(DEFAULT_SOCKET_TIMEOUT);
+		
+		setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
 		
 	}
 	
