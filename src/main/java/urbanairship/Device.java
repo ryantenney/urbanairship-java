@@ -185,4 +185,19 @@ public class Device implements java.io.Serializable
 		
 		return identifier;
 	}
+	
+	public void addTag(String tag)
+	{
+		if ( (tag == null) || (tag.length() == 0))
+		{
+			throw new IllegalArgumentException("tag parameter");
+		}
+		
+		if (this.getTags() == null)
+		{
+			this.tags = new ArrayList<String>();
+		}
+		
+		this.tags.add(tag);
+	}
 }
