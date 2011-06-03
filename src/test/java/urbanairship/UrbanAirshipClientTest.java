@@ -73,6 +73,7 @@ public class UrbanAirshipClientTest
 		Calendar c = Calendar.getInstance();
 
 		c.add(Calendar.DAY_OF_YEAR, 1);
+		c.set(Calendar.MILLISECOND, 0);
 		
 		Broadcast bcast = new Broadcast();
 		bcast.setScheduleFor(c);
