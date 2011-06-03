@@ -73,15 +73,16 @@ public class UrbanAirshipClient
 	}
 	
 	
-	public void addTagToDevice(String deviceToken, String tag)
+	public void addTagToDevice(Device device, String tag)
 	{
 		if (tag.length() > 255)
 		{
 			throw new IllegalArgumentException("maximum tag length is 255. Tag: " + tag);
 		}
 		
-		put("/api/device_tokens/" + encode(deviceToken) + "/tags/" + encode(tag));
+		put("/api/device_tokens/" + encode(device.getIdentifier()) + "/tags/" + encode(tag));
 	}
+	
 	
 	public void removeTagFromDevice(String deviceToken, String tag)
 	{
