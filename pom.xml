@@ -1,3 +1,8 @@
+<!--   
+
+  Maven pom.xml 
+
+ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>urbanairship</groupId>
@@ -64,7 +69,9 @@
             <url>file:///tmp/repo</url>
         </repository>
     </distributionManagement>
+    
     <dependencies>
+    
 		<dependency>
 		    <groupId>org.apache.httpcomponents</groupId>
 	    	<artifactId>httpclient</artifactId>
@@ -85,4 +92,5 @@
 	    </dependency>
         
     </dependencies>
+    
 </project>
