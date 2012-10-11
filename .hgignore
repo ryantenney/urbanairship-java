@@ -1,7 +1,0 @@
-bin
-syntax: regexp
-^test-output$
-syntax: regexp
-^target$
-syntax: regexp
-^temp-testng-customsuite\.xml$
