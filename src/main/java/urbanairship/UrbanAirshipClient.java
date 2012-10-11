@@ -11,6 +11,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.params.AllClientPNames;
+import org.apache.http.conn.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -36,15 +37,15 @@ public class UrbanAirshipClient
 	private String username;
 	private String password;
 	private HttpClient httpClient;
+	private ClientConnectionManager connMgr;
 	
 	public UrbanAirshipClient(String username, String password)
 	{
-		this(username, password, null);
+		this.username = username;
+		this.password = password;
 		
 		setSocketTimeout(DEFAULT_SOCKET_TIMEOUT);
-		
 		setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);
-		
 	}
 	
 	public UrbanAirshipClient(String username, String password, HttpClient hc)
@@ -52,6 +53,13 @@ public class UrbanAirshipClient
 		this.username = username;
 		this.password = password;
 		this.httpClient = hc;
+	}
+
+	public UrbanAirshipClient(String username, String password, ClientConnectionManager connMgr)
+	{
+		this.username = username;
+		this.password = password;
+		this.connMgr = connMgr;
 	}
 
 	public void register(Device dev)
@@ -531,7 +539,7 @@ public class UrbanAirshipClient
 	
 	protected HttpClient createHttpClient()
 	{
-		DefaultHttpClient client = new DefaultHttpClient();
+		DefaultHttpClient client = new DefaultHttpClient(this.connMgr);
 		
 		client.getParams().setParameter(AllClientPNames.USER_AGENT, "urbanairship-java library");
 
