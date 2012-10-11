@@ -10,10 +10,9 @@
     <version>0.1-SNAPSHOT</version>
     <name>Urban Airship Java</name>
     <packaging>jar</packaging>
-    <url>http://bitbucket.org/sullis/urbanairship-java/</url>
+    <url>http://bitbucket.org/ryantenney/urbanairship-java/</url>
     <scm>
-        <connection>scm:hg:http://bitbucket.org/sullis/urbanairship-java/</connection>
-        <developerConnection>scm:hg:https://bitbucket.org/sullis/urbanairship-java/</developerConnection>
+        <developerConnection>scm:git:ssh://git@bitbucket.org/ryantenney/urbanairship-java/</developerConnection>
     </scm>
 
     <build>
