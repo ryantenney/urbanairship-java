@@ -44,7 +44,7 @@ public class Push implements java.io.Serializable
 		{
 			this.deviceTokens = new ArrayList<String>();
 		}
-		this.getDeviceTokens().add(token);
+		this.deviceTokens.add(token);
 	}
 	
 	public List<String> getAliases()
@@ -59,7 +59,11 @@ public class Push implements java.io.Serializable
 	
 	public void addAlias(String alias)
 	{
-		this.getAliases().add(alias);
+		if (this.aliases == null)
+		{
+			this.aliases = new ArrayList<String>();
+		}
+		this.aliases.add(alias);
 	}
 	
 	public List<String> getTags()
@@ -74,7 +78,11 @@ public class Push implements java.io.Serializable
 	
 	public void addTag(String tag)
 	{
-		this.getTags().add(tag);
+		if (this.tags == null)
+		{
+			this.tags = new ArrayList<String>();
+		}
+		this.tags.add(tag);
 	}
 	
 	public List<Calendar> getScheduleFor()
@@ -104,6 +112,15 @@ public class Push implements java.io.Serializable
 	public void setExcludeTokens(List<String> excludeTokens)
 	{
 		this.excludeTokens = excludeTokens;
+	}
+	
+	public void addExcludeToken(String excludeToken)
+	{
+		if (this.excludeTokens == null)
+		{
+			this.excludeTokens = new ArrayList<String>();
+		}
+		this.excludeTokens.add(excludeToken);
 	}
 	
 	public APS getAps()
