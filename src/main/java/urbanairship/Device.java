@@ -88,7 +88,7 @@ public class Device implements java.io.Serializable
 
 	/**
 	 * 
-	 * @return The end user’s timezone as a timezone name like “Europe/Berlin”
+	 * @return The end user's timezone as a timezone name like 'Europe/Berlin'
 	 * 
 	 */
 	public String getTimeZone()
@@ -98,7 +98,7 @@ public class Device implements java.io.Serializable
 
 	/**
 	 * 
-	 * @param tz The end user’s timezone as a timezone name like “Europe/Berlin”
+	 * @param tz The end user's timezone as a timezone name like 'Europe/Berlin'
 	 * 
 	 */
 	public void setTimeZone(String tz)
