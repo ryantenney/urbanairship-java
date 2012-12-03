@@ -81,6 +81,24 @@ public class UrbanAirshipClient
 	}
 	
 	
+	public void unregister(Device dev)
+	{
+		
+		String identifier = dev.getIdentifier();
+		String path = dev.getPath();
+		
+		if ( (identifier == null) || (identifier.trim().length() == 0) )
+		{
+			throw new IllegalStateException("missing device identifier");
+		}
+		
+		delete("/api/" 
+				+ path 
+				+ "/" 
+				+ encode(identifier));
+	}
+	
+	
 	public void addTagToDevice(Device device, String tag)
 	{
 		if (tag.length() > 255)
