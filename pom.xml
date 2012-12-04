@@ -5,7 +5,7 @@
 
 	<groupId>com.ryantenney</groupId>
 	<artifactId>urbanairship-java</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>Urban Airship Java</name>
 	<packaging>jar</packaging>
 	<description>Urban Airship API Client for Java</description>
